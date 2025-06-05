@@ -1,11 +1,4 @@
-'''
-Function:
-    游戏开始界面
-作者:
-    Charles
-微信公众号:
-    Charles的皮卡丘
-'''
+
 import sys
 import pygame
 

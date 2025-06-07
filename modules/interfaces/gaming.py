@@ -1,11 +1,5 @@
-'''
-Function:
-    游戏进行中界面
-作者:
-    Charles
-微信公众号:
-    Charles的皮卡丘
-'''
+
+
 import sys
 import json
 import math
@@ -25,13 +19,13 @@ class GamingInterface():
         map_w = self.cfg.SCREENSIZE[0]
         map_h = 500
         # 按钮大小和位置
-        button_w = 60
-        button_h = 60
+        button_w = 120
+        button_h = 120
         button_y = 520
         # 间隙
         gap = 20
         # 按钮放在工具栏, 工具栏两端各有一个信息显示框
-        toolbar_w = gap * 7 + button_w * 6
+        toolbar_w = 1000
         info_w = (self.cfg.SCREENSIZE[0] - toolbar_w) // 2
         info_h = self.cfg.SCREENSIZE[1] - map_h
         toolbar_h = self.cfg.SCREENSIZE[1] - map_h
@@ -61,7 +55,7 @@ class GamingInterface():
         self.info_font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 14)
         self.button_font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 20)
         # 可以放炮塔的地方
-        self.placeable = {0: self.grass}
+        self.placeable = {0: self.grass,3:self.water}
         # 地图元素字典(数字对应.map文件中的数字)
         self.map_elements = {
             0: self.grass,

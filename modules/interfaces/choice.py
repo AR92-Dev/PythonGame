@@ -1,30 +1,23 @@
-'''
-Function:
-    游戏模式选择界面
-作者:
-    Charles
-微信公众号:
-    Charles的皮卡丘
-'''
+
 import sys
 import pygame
 
 
-'''游戏选择主界面'''
+
 class MainInterface(pygame.sprite.Sprite):
     def __init__(self, cfg):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(cfg.IMAGEPATHS['choice']['load_game']).convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = (0, 0)
-    '''更新函数'''
+   
     def update(self):
         pass
 
 
-'''地图1'''
+
 class MapButton1(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(175, 240)):
+    def __init__(self, cfg, position=(175, 140)):
         pygame.sprite.Sprite.__init__(self)
         self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['map1_black']).convert()
         self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['map1_red']).convert()
@@ -32,7 +25,7 @@ class MapButton1(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+   
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -41,9 +34,9 @@ class MapButton1(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''地图2'''
+
 class MapButton2(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(400, 240)):
+    def __init__(self, cfg, position=(175, 340)):
         pygame.sprite.Sprite.__init__(self)
         self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['map2_black']).convert()
         self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['map2_red']).convert()
@@ -51,7 +44,7 @@ class MapButton2(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+ 
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -60,9 +53,9 @@ class MapButton2(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''地图3'''
+
 class MapButton3(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(625, 240)):
+    def __init__(self, cfg, position=(175, 540)):
         pygame.sprite.Sprite.__init__(self)
         self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['map3_black']).convert()
         self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['map3_red']).convert()
@@ -70,7 +63,7 @@ class MapButton3(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+    
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -79,50 +72,39 @@ class MapButton3(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''信息显示框'''
+
 class InfoBox(pygame.sprite.Sprite):
-    def __init__(self, position=(400, 475)):
+    def __init__(self, position=(800, 400)):
         pygame.sprite.Sprite.__init__(self)
-        self.ori_image = pygame.Surface((625, 200))
+        self.ori_image = pygame.Surface((800, 600))
         self.ori_image.fill((255, 255, 255))
-        self.ori_image_front = pygame.Surface((621, 196))
+        self.ori_image_front = pygame.Surface((795, 595))
         self.ori_image_front.fill((0, 0, 0))
         self.ori_image.blit(self.ori_image_front, (2, 2))
         self.rect = self.ori_image.get_rect()
         self.rect.center = position
-    '''更新函数'''
+    
     def update(self, btns):
         self.image = self.ori_image
         mouse_pos = pygame.mouse.get_pos()
         for btn in btns:
             if btn.rect.collidepoint(mouse_pos):
-                self.image.blit(btn.image_3, (225, 25))
+                self.image.blit(btn.image_3, (225, 255))
                 break
 
 
-'''简单难度按钮'''
+
 class EasyButton(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(400, 150)):
+    def __init__(self, cfg, position=(700, 150)):
         pygame.sprite.Sprite.__init__(self)
-        self.image_1 = pygame.Surface((285, 100))
-        self.image_1_front = pygame.Surface((281, 96))
-        self.image_1.fill((255, 255, 255))
-        self.image_1_front.fill((0, 0, 0))
-        self.image_1.blit(self.image_1_front, (2, 2))
-        self.image_2 = pygame.Surface((285, 100))
-        self.image_2_front = pygame.Surface((281, 96))
-        self.image_2.fill((255, 255, 255))
-        self.image_2_front.fill((24, 196, 40))
-        self.image_2.blit(self.image_2_front, (2, 2))
-        self.text = 'easy'
-        self.font = pygame.font.Font(cfg.FONTPATHS['m04'], 42)
-        self.text_render = self.font.render(self.text, 1, (255, 255, 255))
-        self.image_1.blit(self.text_render, (60, 29))
-        self.image_2.blit(self.text_render, (60, 29))
+        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['easy_1']).convert()
+        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['easy_2']).convert()
+        self.image_3 = pygame.image.load(cfg.IMAGEPATHS['choice']['Easy_B']).convert()
+        self.text = "easy"
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+    
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -131,29 +113,18 @@ class EasyButton(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''中等难度按钮'''
+
 class MediumButton(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(400, 300)):
+    def __init__(self, cfg, position=(700, 350)):
         pygame.sprite.Sprite.__init__(self)
-        self.image_1 = pygame.Surface((285, 100))
-        self.image_1_front = pygame.Surface((281, 96))
-        self.image_1.fill((255, 255, 255))
-        self.image_1_front.fill((0, 0, 0))
-        self.image_1.blit(self.image_1_front, (2, 2))
-        self.image_2 = pygame.Surface((285, 100))
-        self.image_2_front = pygame.Surface((281, 96))
-        self.image_2.fill((255, 255, 255))
-        self.image_2_front.fill((24, 30, 196))
-        self.image_2.blit(self.image_2_front, (2, 2))
-        self.text = 'medium'
-        self.font = pygame.font.Font(cfg.FONTPATHS['m04'], 42)
-        self.text_render = self.font.render(self.text, 1, (255, 255, 255))
-        self.image_1.blit(self.text_render, (15, 29))
-        self.image_2.blit(self.text_render, (15, 29))
+        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['mid_1']).convert()
+        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['mid_2']).convert()
+        self.image_3 = pygame.image.load(cfg.IMAGEPATHS['choice']['Mid_B']).convert()
+        self.text = "medium"
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+    
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -162,29 +133,18 @@ class MediumButton(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''困难难度按钮'''
+
 class HardButton(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(400, 450)):
+    def __init__(self, cfg, position=(700, 550)):
         pygame.sprite.Sprite.__init__(self)
-        self.image_1 = pygame.Surface((285, 100))
-        self.image_1_front = pygame.Surface((281, 96))
-        self.image_1.fill((255, 255, 255))
-        self.image_1_front.fill((0, 0, 0))
-        self.image_1.blit(self.image_1_front, (2, 2))
-        self.image_2 = pygame.Surface((285, 100))
-        self.image_2_front = pygame.Surface((281, 96))
-        self.image_2.fill((255, 255, 255))
-        self.image_2_front.fill((196, 24, 24))
-        self.image_2.blit(self.image_2_front, (2, 2))
-        self.text = 'hard'
-        self.font = pygame.font.Font(cfg.FONTPATHS['m04'], 42)
-        self.text_render = self.font.render(self.text, 1, (255, 255, 255))
-        self.image_1.blit(self.text_render, (60, 29))
-        self.image_2.blit(self.text_render, (60, 29))
+        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['hard_1']).convert()
+        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['hard_2']).convert()
+        self.image_3 = pygame.image.load(cfg.IMAGEPATHS['choice']['Hard_B']).convert()
+        self.text = "hard"
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+    
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -193,7 +153,7 @@ class HardButton(pygame.sprite.Sprite):
             self.image = self.image_1
 
 
-'''游戏地图和困难选择界面'''
+
 class ChoiceInterface():
     def __init__(self, cfg):
         # part1
@@ -206,11 +166,12 @@ class ChoiceInterface():
         self.easy_btn = EasyButton(cfg)
         self.medium_btn = MediumButton(cfg)
         self.hard_btn = HardButton(cfg)
-    '''外部调用'''
-    def update(self, screen):
+    
+    def update(self, screen,cfg):
         clock = pygame.time.Clock()
         # part1
         self.map_btns = pygame.sprite.Group(self.map_btn1, self.map_btn2, self.map_btn3)
+        
         map_choice, difficulty_choice = None, None
         while True:
             clock.tick(60)
@@ -236,12 +197,35 @@ class ChoiceInterface():
             if map_choice:
                 break
         # part2
+        self.Background1 = pygame.image.load(cfg.IMAGEPATHS['choice']['Easy_B']).convert()
+        self.Background2 = pygame.image.load(cfg.IMAGEPATHS['choice']['Mid_B']).convert()
+        self.Background3 = pygame.image.load(cfg.IMAGEPATHS['choice']['Hard_B']).convert()
+        self.Background=self.Background1
+        self.Background_rect = self.Background.get_rect()
+        self.Background_rect.topleft = (0, 0)
+       
         self.difficulty_btns = pygame.sprite.Group(self.easy_btn, self.medium_btn, self.hard_btn)
+        self.Background = self.Background1
         while True:
             clock.tick(60)
-            screen.fill((0, 0, 0))
+            mouse_pos = pygame.mouse.get_pos()
+            
+            for btn in self.difficulty_btns:
+                if btn.rect.collidepoint(mouse_pos):
+                    if btn.text == "easy":
+                        self.Background = self.Background1
+                    elif btn.text == "medium":
+                        self.Background = self.Background2
+                    elif btn.text == "hard":
+                        self.Background = self.Background3
+                    break
+            screen.blit(self.Background, self.Background_rect)
             self.difficulty_btns.update()
             self.difficulty_btns.draw(screen)
+            for btn in self.difficulty_btns:
+                if btn.rect.collidepoint(mouse_pos):
+                    self.Background.blit(btn.image_3, (0, 0))
+                break
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

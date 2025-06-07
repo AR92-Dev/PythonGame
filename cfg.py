@@ -3,7 +3,7 @@ import os
 
 
 '''屏幕大小'''
-SCREENSIZE = (800, 600)
+SCREENSIZE = (1400, 800)
 '''图片路径'''
 IMAGEPATHS = {
     'choice': {
@@ -17,6 +17,15 @@ IMAGEPATHS = {
         'map3': os.path.join(os.getcwd(), 'resources/images/choice/map3.png'),
         'map3_black': os.path.join(os.getcwd(), 'resources/images/choice/map3_black.png'),
         'map3_red': os.path.join(os.getcwd(), 'resources/images/choice/map3_red.png'),
+        'easy_1': os.path.join(os.getcwd(), 'resources/images/choice/Easy_1.png'),
+        'easy_2': os.path.join(os.getcwd(), 'resources/images/choice/Easy_2.png'),
+        'mid_1': os.path.join(os.getcwd(), 'resources/images/choice/Mid_1.png'),
+        'mid_2': os.path.join(os.getcwd(), 'resources/images/choice/Mid_2.png'),
+        'hard_1': os.path.join(os.getcwd(), 'resources/images/choice/Hard_1.png'),
+        'hard_2': os.path.join(os.getcwd(), 'resources/images/choice/Hard_2.png'),
+        'Easy_B': os.path.join(os.getcwd(), 'resources/images/choice/Easy_B.jpg'),
+        'Mid_B': os.path.join(os.getcwd(), 'resources/images/choice/Mid_B.jpg'),
+        'Hard_B': os.path.join(os.getcwd(), 'resources/images/choice/Hard_B.jpg'),
     },
     'end': {
         'gameover': os.path.join(os.getcwd(), 'resources/images/end/gameover.png'),

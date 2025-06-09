@@ -1,10 +1,10 @@
-'''配置文件'''
+
 import os
 
 
-'''屏幕大小'''
+
 SCREENSIZE = (1400, 800)
-'''图片路径'''
+
 IMAGEPATHS = {
     'choice': {
         'load_game': os.path.join(os.getcwd(), 'resources/images/choice/load_game.png'),
@@ -26,6 +26,8 @@ IMAGEPATHS = {
         'Easy_B': os.path.join(os.getcwd(), 'resources/images/choice/Easy_B.jpg'),
         'Mid_B': os.path.join(os.getcwd(), 'resources/images/choice/Mid_B.jpg'),
         'Hard_B': os.path.join(os.getcwd(), 'resources/images/choice/Hard_B.jpg'),
+        'Resume_1': os.path.join(os.getcwd(), 'resources/images/choice/Resume_1.png'),
+        'Resume_2': os.path.join(os.getcwd(), 'resources/images/choice/Resume_2.jpg'),
     },
     'end': {
         'gameover': os.path.join(os.getcwd(), 'resources/images/end/gameover.png'),
@@ -48,6 +50,8 @@ IMAGEPATHS = {
         'godark': os.path.join(os.getcwd(), 'resources/images/game/godark.png'), 
         'golight': os.path.join(os.getcwd(), 'resources/images/game/golight.png'), 
         'grass': os.path.join(os.getcwd(), 'resources/images/game/grass.png'), 
+        'grass_1': os.path.join(os.getcwd(), 'resources/images/game/spr_grass_01.png'), 
+        'Ground_1': os.path.join(os.getcwd(), 'resources/images/game/spr_tile_set_ground.png'), 
         'healthfont': os.path.join(os.getcwd(), 'resources/images/game/healthfont.png'), 
         'heavy_tower': os.path.join(os.getcwd(), 'resources/images/game/heavy_tower.png'), 
         'med_tower': os.path.join(os.getcwd(), 'resources/images/game/med_tower.png'), 
@@ -58,7 +62,41 @@ IMAGEPATHS = {
         'tiles': os.path.join(os.getcwd(), 'resources/images/game/tiles.png'), 
         'unitfont': os.path.join(os.getcwd(), 'resources/images/game/unitfont.png'), 
         'water': os.path.join(os.getcwd(), 'resources/images/game/water.png'), 
-        'x': os.path.join(os.getcwd(), 'resources/images/game/x.png'), 
+        'x': os.path.join(os.getcwd(), 'resources/images/game/x.png'),
+        'Castle_Easy': os.path.join(os.getcwd(), 'resources/images/game/spr_castle_green.png'), 
+        'Castle_Mid': os.path.join(os.getcwd(), 'resources/images/game/spr_castle_blue.png'), 
+        'Castle_Hard': os.path.join(os.getcwd(), 'resources/images/game/spr_castle_red.png'),
+        'T1': os.path.join(os.getcwd(), 'resources/images/game/T1.png'), 
+        'T2': os.path.join(os.getcwd(), 'resources/images/game/T2.png'), 
+        'T3': os.path.join(os.getcwd(), 'resources/images/game/T3.png'), 
+        'T4': os.path.join(os.getcwd(), 'resources/images/game/T4.png'), 
+        'T5': os.path.join(os.getcwd(), 'resources/images/game/T5.png'),
+        'T6': os.path.join(os.getcwd(), 'resources/images/game/T6.png'),    
+        'arrow_1': os.path.join(os.getcwd(), 'resources/images/game/arrow_1.png'), 
+        'arrow_2': os.path.join(os.getcwd(), 'resources/images/game/arrow_2.png'), 
+        'arrow_3': os.path.join(os.getcwd(), 'resources/images/game/arrow_3.png'), 
+        'arrow_4': os.path.join(os.getcwd(), 'resources/images/game/arrow_4.png'), 
+        'arrow_5': os.path.join(os.getcwd(), 'resources/images/game/arrow_5.png'), 
+        'arrow_6': os.path.join(os.getcwd(), 'resources/images/game/arrow_6.png'), 
+        'enemy_1_1': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_goblin_1.png'), 
+        'enemy_1_2': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_goblin_2.png'), 
+        'enemy_1_3': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_goblin_3.png'),
+        'enemy_1_4': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_goblin_4.png'), 
+        'enemy_2_1': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_zombie_1.png'), 
+        'enemy_2_2': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_zombie_2.png'), 
+        'enemy_2_3': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_zombie_3.png'), 
+        'enemy_2_4': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_zombie_4.png'), 
+        'enemy_3_1': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_bat_1.png'),
+        'enemy_3_2': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_bat_2.png'),  
+        'enemy_3_3': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_bat_3.png'),  
+        'enemy_3_4': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_bat_4.png'),  
+        'enemy_4_1': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_1.png'),  
+        'enemy_4_2': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_2.png'),  
+        'enemy_4_3': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_3.png'),  
+        'enemy_4_4': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_4.png'),
+        'Bomb': os.path.join(os.getcwd(), 'resources/images/game/Bomb.png'),  
+        'pause': os.path.join(os.getcwd(), 'resources/images/game/pause.png'),   
+        
     },
     'pause': {
         'gamepaused': os.path.join(os.getcwd(), 'resources/images/pause/gamepaused.png'), 
@@ -73,25 +111,30 @@ IMAGEPATHS = {
         'start_interface': os.path.join(os.getcwd(), 'resources/images/start/start_interface.png'), 
     },
 }
-'''地图路径'''
+
 MAPPATHS = {
     '1': os.path.join(os.getcwd(), 'resources/maps/1.map'),
     '2': os.path.join(os.getcwd(), 'resources/maps/2.map'),
     '3': os.path.join(os.getcwd(), 'resources/maps/3.map'),
 }
-'''字体路径'''
+
 FONTPATHS = {
     'Calibri': os.path.join(os.getcwd(), 'resources/fonts/Calibri.ttf'),
     'm04': os.path.join(os.getcwd(), 'resources/fonts/m04.ttf'),
     'Microsoft Sans Serif': os.path.join(os.getcwd(), 'resources/fonts/Microsoft Sans Serif.ttf'),
 }
-'''不同难度的settings'''
+
 DIFFICULTYPATHS = {
     'easy': os.path.join(os.getcwd(), 'resources/difficulties/easy.json'),
     'hard': os.path.join(os.getcwd(), 'resources/difficulties/hard.json'),
     'medium': os.path.join(os.getcwd(), 'resources/difficulties/medium.json'),
 }
-'''音频路径'''
+
 AUDIOPATHS = {
     'bgm': os.path.join(os.getcwd(), 'resources/audios/bgm.mp3'),
+}
+nexus_positions = {
+    "1.map": (1180, 700),
+    "2.map": (100, 200),
+    "3.map": (500, 300)
 }

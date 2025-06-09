@@ -1,37 +1,44 @@
-'''
-Function:
-    游戏暂停界面
-作者:
-    Charles
-微信公众号:
-    Charles的皮卡丘
-'''
 import sys
 import pygame
 
-
-'''游戏暂停主界面'''
 class MainInterface(pygame.sprite.Sprite):
     def __init__(self, cfg):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(cfg.IMAGEPATHS['pause']['gamepaused']).convert()
+        width, height = 800, 500
+        self.image = pygame.Surface((width, height), pygame.SRCALPHA)
+        self.image.fill((30, 30, 30, 20))
+        font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 48)
+        text_surf = font.render("Game Paused", True, (255, 255, 255))
+        text_rect = text_surf.get_rect(center=(width // 2, 80))
+        self.image.blit(text_surf, text_rect)
         self.rect = self.image.get_rect()
-        self.rect.center = cfg.SCREENSIZE[0] / 2, cfg.SCREENSIZE[1] / 2
-    '''更新函数'''
+        self.rect.center = (cfg.SCREENSIZE[0] // 2, cfg.SCREENSIZE[1] // 2)
+
     def update(self):
         pass
 
-
-'''恢复游戏按钮'''
-class ResumeButton(pygame.sprite.Sprite):
-    def __init__(self, cfg, position=(391, 380)):
+class Button1(pygame.sprite.Sprite):
+    def __init__(self, cfg, position):
         pygame.sprite.Sprite.__init__(self)
-        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['pause']['resume_black']).convert()
-        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['pause']['resume_red']).convert()
+        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['start']['quit_black']).convert_alpha()
+        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['start']['quit_red']).convert_alpha()
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
-    '''更新函数: 不断地更新检测鼠标是否在按钮上'''
+    def update(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            self.image = self.image_2
+        else:
+            self.image = self.image_1
+class Button2(pygame.sprite.Sprite):
+    def __init__(self, cfg, position):
+        pygame.sprite.Sprite.__init__(self)
+        self.image_1 = pygame.image.load(cfg.IMAGEPATHS['choice']['Resume_1']).convert_alpha()
+        self.image_2 = pygame.image.load(cfg.IMAGEPATHS['choice']['Resume_2']).convert_alpha()
+        self.image = self.image_1
+        self.rect = self.image.get_rect()
+        self.rect.center = position
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -39,32 +46,22 @@ class ResumeButton(pygame.sprite.Sprite):
         else:
             self.image = self.image_1
 
-
-'''游戏暂停界面'''
 class PauseInterface():
     def __init__(self, cfg):
         self.main_interface = MainInterface(cfg)
-        self.resume_btn = ResumeButton(cfg)
-        self.components = pygame.sprite.LayeredUpdates(self.main_interface, self.resume_btn)
-    '''外部调用'''
+        self.resume_btn = Button2(cfg, (cfg.SCREENSIZE[0] // 2-200, cfg.SCREENSIZE[1] // 2 + 50))
+        self.quit_btn = Button1(cfg, (cfg.SCREENSIZE[0] // 2+200, cfg.SCREENSIZE[1] // 2 +50))
+        self.components = pygame.sprite.LayeredUpdates(self.main_interface, self.resume_btn, self.quit_btn)
+
     def update(self, screen):
         clock = pygame.time.Clock()
-        background = pygame.Surface(screen.get_size())
-        count = 0
-        flag = True
+
         while True:
-            count += 1
             clock.tick(60)
-            self.components.clear(screen, background)
             self.components.update()
-            if count % 10 == 0:
-                count = 0
-                flag = not flag
-            if flag:
-                self.components.draw(screen)
-            else:
-                screen.blit(self.main_interface.image, self.main_interface.rect)
+            self.components.draw(screen)
             pygame.display.flip()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -74,3 +71,6 @@ class PauseInterface():
                         mouse_pos = pygame.mouse.get_pos()
                         if self.resume_btn.rect.collidepoint(mouse_pos):
                             return True
+                        elif self.quit_btn.rect.collidepoint(mouse_pos):
+                            pygame.quit()
+                            sys.exit(0)

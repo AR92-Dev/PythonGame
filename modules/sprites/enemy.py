@@ -1,41 +1,45 @@
-'''
-Function:
-    敌方类
-作者:
-    Charles
-微信公众号:
-    Charles的皮卡丘
-'''
+
 import pygame
 
-
-'''敌方类'''
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, enemy_type, cfg):
         assert enemy_type in range(4)
         pygame.sprite.Sprite.__init__(self)
         self.enemy_type = enemy_type
-        self.imagepaths = [cfg.IMAGEPATHS['game']['enemy_yellow'], cfg.IMAGEPATHS['game']['enemy_red'], cfg.IMAGEPATHS['game']['enemy_pink'], cfg.IMAGEPATHS['game']['enemy_blue']]
-        self.image = pygame.image.load(self.imagepaths[enemy_type])
+        self.CurrentAnim = 0
+        self.sprites = []
+        if enemy_type == 0:
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_1_1'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_1_2'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_1_3'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_1_4'])
+        elif enemy_type ==1:
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_2_1'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_2_2'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_2_3'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_2_4'])
+        elif enemy_type ==2:
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_3_1'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_3_2'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_3_3'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_3_4'])
+        elif enemy_type ==3:
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_4_1'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_4_2'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_4_3'])
+            self.sprites.append(cfg.IMAGEPATHS['game']['enemy_4_4'])
+        self.image = pygame.image.load(self.sprites[self.CurrentAnim])
         self.rect = self.image.get_rect()
-        # 走过的路(避免重复走，保证去攻击城堡)
         self.reached_path = []
-        # 在道路某个单元中移动的距离, 当cell_move_dis大于单元长度时移动到下一个到了单元并置0该变量
         self.cell_move_dis = 0
-        # 当前所在的位置
         self.coord = 3, 2
-        self.position = 60, 40
+        self.position = 60, 42
         self.rect.left, self.rect.top = self.position
         if enemy_type == 0:
-            # 最大生命值
             self.max_life_value = 20
-            # 当前生命值
             self.life_value = 20
-            # 速度
             self.speed = 2
-            # 击杀奖励
             self.reward = 100
-            # 对大本营造成的伤害
             self.damage = 1
         elif enemy_type == 1:
             self.max_life_value = 40
@@ -55,7 +59,6 @@ class Enemy(pygame.sprite.Sprite):
             self.speed = 0.2
             self.reward = 500
             self.damage = 4
-    '''不停地移动'''
     def move(self, cell_len):
         is_next_cell = False
         self.cell_move_dis += self.speed
@@ -63,3 +66,8 @@ class Enemy(pygame.sprite.Sprite):
             self.cell_move_dis = 0
             is_next_cell = True
         return is_next_cell
+    def update(self):
+        self.CurrentAnim+=0.2
+        if self.CurrentAnim >=len(self.sprites):
+            self.CurrentAnim=0
+        self.image = pygame.image.load(self.sprites[int(self.CurrentAnim)])

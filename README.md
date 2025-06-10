@@ -1,5 +1,5 @@
 # Introduction
-https://mp.weixin.qq.com/s/mcnN3dF5tzWlRg91cnWTEw
+This game was pre-built and i made some changes on it
 
 # Environment
 ```

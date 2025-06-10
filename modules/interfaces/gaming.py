@@ -8,6 +8,7 @@ import pygame
 from ..sprites import Enemy
 from ..sprites import Turret
 from ..sprites.Bomb import Bomb
+from ..sprites.Miner import Miner
 from .pause import PauseInterface
 from collections import namedtuple
 import cfg
@@ -47,6 +48,7 @@ class GamingInterface():
         self.button_font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 20)
         self.placeable = {0: self.grass,7: self.grass_2}
         self.placeable_Bomb = {1: self.rock,8: self.ground_2}
+        self.placeable_Miner = {2: self.dirt}
         self.map_elements = {
             0: self.grass,
             1: self.rock,
@@ -64,6 +66,7 @@ class GamingInterface():
         self.mouse_carried = []
         self.built_turret_group = pygame.sprite.Group()
         self.built_Bomb_group = pygame.sprite.Group()
+        self.built_Miner_group = pygame.sprite.Group()
         self.enemies_group = pygame.sprite.Group()
         self.arrows_group = pygame.sprite.Group()
         Button = namedtuple('Button', ['rect', 'text', 'onClick', 'image'])
@@ -72,6 +75,7 @@ class GamingInterface():
             'T2': pygame.image.load(cfg.IMAGEPATHS['game']['T2']).convert_alpha(),
             'T3': pygame.image.load(cfg.IMAGEPATHS['game']['T3']).convert_alpha(),
             'T4': pygame.image.load(cfg.IMAGEPATHS['game']['T5']).convert_alpha(),
+            'Miner': pygame.image.load(cfg.IMAGEPATHS['game']['Miner']).convert_alpha(),
             'Bomb': pygame.image.load(cfg.IMAGEPATHS['game']['Bomb']).convert_alpha(),
             'XXX': pygame.image.load(cfg.IMAGEPATHS['game']['x']).convert_alpha(),
             'Pause': pygame.image.load(cfg.IMAGEPATHS['game']['pause']).convert_alpha(),
@@ -84,8 +88,9 @@ class GamingInterface():
             Button(pygame.Rect(button_y, gap*2 , button_w, button_h), 'T2', self.takeT2, self.button_images['T2']),
             Button(pygame.Rect(button_y, gap*3 , button_w, button_h), 'T3', self.takeT3, self.button_images['T3']),
             Button(pygame.Rect(button_y, gap*4 , button_w, button_h), 'T4', self.takeT4, self.button_images['T4']),
-            Button(pygame.Rect(button_y, gap*5 , button_w, button_h), 'Bomb', self.takeBomb, self.button_images['Bomb']),
-            Button(pygame.Rect(button_y, gap*6 , button_w, button_h), 'Remove', self.takeXXX, self.button_images['XXX']),
+            Button(pygame.Rect(button_y, gap*5 , button_w, button_h), 'Miner', self.takeMiner, self.button_images['Miner']),
+            Button(pygame.Rect(button_y, gap*6 , button_w, button_h), 'Bomb', self.takeBomb, self.button_images['Bomb']),
+            Button(pygame.Rect(button_y, gap*7 , button_w, button_h), 'Remove', self.takeXXX, self.button_images['XXX']),
             
 ]
 
@@ -123,6 +128,8 @@ class GamingInterface():
                                     self.buildTurret(event.pos)
                                 elif self.mouse_carried[0] == 'bomb':
                                     self.buildBomb(event.pos)
+                                elif self.mouse_carried[0] == 'Miner':
+                                    self.buildMiner(event.pos)
                                 elif self.mouse_carried[0] == 'XXX':
                                     self.sellTurret(event.pos)
                         
@@ -135,6 +142,8 @@ class GamingInterface():
                                 elif button.text == 'T3':
                                     button.onClick()
                                 elif button.text == 'T4':
+                                    button.onClick() 
+                                elif button.text == 'Miner':
                                     button.onClick()    
                                 elif button.text == 'Bomb':
                                     button.onClick()
@@ -208,6 +217,15 @@ class GamingInterface():
                     Bomb_Sound.play()
                     self.built_Bomb_group.remove(bomb)
                     del bomb
+            for miner in self.built_Miner_group:
+                current_time = pygame.time.get_ticks()
+                if miner.Mining_Time and current_time >= miner.Mining_Time:
+                    miner.Min()  
+                    Mining_Sound = pygame.mixer.Sound('resources/audios/collect-points-190037.mp3')
+                    Mining_Sound.play()
+                    self.money += 100 
+                    miner.reset()  
+
                     
             if has_control:
                 has_control = False
@@ -233,6 +251,7 @@ class GamingInterface():
         self.drawMouseCarried(screen)
         self.drawBuiltTurret(screen)
         self.drawBuiltBomb(screen)
+        self.drawBuiltMiner(screen)
         self.drawEnemies(screen)
         self.drawArrows(screen)
         self.drawButtons(screen)
@@ -275,13 +294,16 @@ class GamingInterface():
     def drawBuiltTurret(self, screen):
         for turret in self.built_turret_group:
             screen.blit(turret.image, turret.rect)
+    def drawBuiltMiner(self, screen):
+        for Miner in self.built_Miner_group:
+            screen.blit(Miner.image, Miner.rect)
     def drawBuiltBomb(self, screen):
         for bomb in self.built_Bomb_group:
             screen.blit(bomb.image, bomb.rect)
     def drawMouseCarried(self, screen):
         if self.mouse_carried:
             mouse_pos = pygame.mouse.get_pos()
-            if self.mouse_carried[0] == 'turret' or self.mouse_carried[0] == 'bomb':
+            if self.mouse_carried[0] == 'turret' or self.mouse_carried[0] == 'bomb' or self.mouse_carried[0]=="Miner":
                 image = self.mouse_carried[1].image
             else:
                 image = self.mouse_carried[1]
@@ -289,7 +311,7 @@ class GamingInterface():
             if self.map_rect.collidepoint(mouse_pos):
                 screen.blit(image, rect.topleft)
 
-                if self.mouse_carried[0] == 'turret' or self.mouse_carried[0] == 'bomb':
+                if self.mouse_carried[0] == 'turret' or self.mouse_carried[0] == 'bomb' or self.mouse_carried[0]=="Miner":
                     self.mouse_carried[1].rect = rect
                     self.mouse_carried[1].position = rect.topleft
 
@@ -305,6 +327,9 @@ class GamingInterface():
             screen.blit(selected_info3, (self.rightinfo_rect.left + 5, self.rightinfo_rect.top + 75))
         elif button.text == 'Bomb':
             selected_info = self.info_font.render('Place a bomb in a enemy road', True, (255, 255, 255))
+            screen.blit(selected_info, (self.rightinfo_rect.left + 5, self.rightinfo_rect.top + 35))
+        elif button.text == 'Miner':
+            selected_info = self.info_font.render('Mining 100 $ every 20 second', True, (255, 255, 255))
             screen.blit(selected_info, (self.rightinfo_rect.left + 5, self.rightinfo_rect.top + 35))
         elif button.text == 'Remove':
             selected_info = self.info_font.render('Sell a turret', True, (255, 255, 255))
@@ -364,6 +389,20 @@ class GamingInterface():
                 self.mouse_carried = []
                 self.takeBomb()
                 bomb.reset()
+    def buildMiner(self, position):
+        Miner = self.mouse_carried[1]
+        coord = self.pos2coord(position)
+        position = self.coord2pos(coord)
+        Miner.position = position
+        Miner.coord = coord
+        Miner.rect.left, Miner.rect.top = position
+        if self.money - Miner.price >= 0:
+            if self.current_map.get(Miner.coord) in self.placeable_Miner.keys():
+                self.money -= Miner.price
+                self.built_Miner_group.add(Miner)
+                self.mouse_carried = []
+                self.takeMiner()
+                Miner.reset()
 
 
     def takeT1(self):
@@ -383,6 +422,10 @@ class GamingInterface():
         T4 = Turret(3, self.cfg)
         if self.money >= T4.price:
             self.mouse_carried = ['turret', T4]
+    def takeMiner(self):
+        Min = Miner(self.cfg)
+        if self.money >= Min.price:
+            self.mouse_carried = ['Miner', Min]
     def takeBomb(self):
         bomb = Bomb(self.cfg)
         if self.money >= bomb.price:

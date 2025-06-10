@@ -2,7 +2,9 @@
 import sys
 import pygame
 
-
+pygame.init()
+B_Hover = pygame.mixer.Sound('resources/audios/ButtonHover.mp3')
+B_Press = pygame.mixer.Sound('resources/audios/Button_Press.mp3')
 
 class MainInterface(pygame.sprite.Sprite):
     def __init__(self, cfg):
@@ -25,13 +27,20 @@ class MapButton1(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
    
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -44,13 +53,21 @@ class MapButton2(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
  
     def update(self):
+        
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -63,33 +80,42 @@ class MapButton3(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
     
     def update(self):
+        
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
 class InfoBox(pygame.sprite.Sprite):
     def __init__(self, position=(800, 400)):
         pygame.sprite.Sprite.__init__(self)
-        self.ori_image = pygame.Surface((800, 600))
+        self.ori_image = pygame.Surface((806, 465))
         self.ori_image.fill((255, 255, 255))
-        self.ori_image_front = pygame.Surface((795, 595))
+        self.ori_image_front = pygame.Surface((797, 460))
         self.ori_image_front.fill((0, 0, 0))
         self.ori_image.blit(self.ori_image_front, (2, 2))
         self.rect = self.ori_image.get_rect()
         self.rect.center = position
+        
     
     def update(self, btns):
         self.image = self.ori_image
         mouse_pos = pygame.mouse.get_pos()
         for btn in btns:
             if btn.rect.collidepoint(mouse_pos):
-                self.image.blit(btn.image_3, (225, 255))
+                self.image.blit(btn.image_3, (2, 2))
                 break
 
 
@@ -104,13 +130,21 @@ class EasyButton(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
     
     def update(self):
+        
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -124,13 +158,21 @@ class MediumButton(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
     
     def update(self):
+        
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -144,13 +186,21 @@ class HardButton(pygame.sprite.Sprite):
         self.image = self.image_1
         self.rect = self.image.get_rect()
         self.rect.center = position
+        self.hovered = False
     
     def update(self):
+        
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -193,6 +243,7 @@ class ChoiceInterface():
                         for btn in self.map_btns:
                             idx += 1
                             if btn.rect.collidepoint(mouse_pos):
+                                B_Press.play()
                                 map_choice = idx
             if map_choice:
                 break
@@ -239,6 +290,8 @@ class ChoiceInterface():
                             idx += 1
                             if btn.rect.collidepoint(mouse_pos):
                                 difficulty_choice = btn.text
+
             if difficulty_choice:
+                B_Press.play()
                 break
         return map_choice, difficulty_choice

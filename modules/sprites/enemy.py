@@ -1,8 +1,9 @@
 
 import pygame
-
+import os
+import cfg
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, enemy_type, cfg):
+    def __init__(self, enemy_type, cfg,map_path):
         assert enemy_type in range(4)
         pygame.sprite.Sprite.__init__(self)
         self.enemy_type = enemy_type
@@ -32,8 +33,10 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.reached_path = []
         self.cell_move_dis = 0
+        map_name = os.path.basename(map_path)   
+        Enemy_pos = cfg.Enemy_positions.get(map_name, (740, 400))
         self.coord = 3, 2
-        self.position = 60, 42
+        self.position = Enemy_pos
         self.rect.left, self.rect.top = self.position
         if enemy_type == 0:
             self.max_life_value = 20

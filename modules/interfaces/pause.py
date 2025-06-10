@@ -1,6 +1,10 @@
 import sys
 import pygame
 
+pygame.init()
+B_Hover = pygame.mixer.Sound('resources/audios/ButtonHover.mp3')
+B_Press = pygame.mixer.Sound('resources/audios/unpause-106278.mp3')
+hovered = False
 class MainInterface(pygame.sprite.Sprite):
     def __init__(self, cfg):
         pygame.sprite.Sprite.__init__(self)
@@ -26,11 +30,18 @@ class Button1(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = position
     def update(self):
+        global hovered
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 class Button2(pygame.sprite.Sprite):
     def __init__(self, cfg, position):
         pygame.sprite.Sprite.__init__(self)
@@ -40,11 +51,18 @@ class Button2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = position
     def update(self):
+        global hovered
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 class PauseInterface():
     def __init__(self, cfg):
@@ -70,6 +88,7 @@ class PauseInterface():
                     if event.button == 1:
                         mouse_pos = pygame.mouse.get_pos()
                         if self.resume_btn.rect.collidepoint(mouse_pos):
+                            B_Press.play()
                             return True
                         elif self.quit_btn.rect.collidepoint(mouse_pos):
                             pygame.quit()

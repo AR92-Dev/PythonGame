@@ -8,7 +8,7 @@ from modules import *
 def main():
     pygame.init()
     pygame.mixer.init()
-    pygame.mixer.music.load(cfg.AUDIOPATHS['bgm'])
+    pygame.mixer.music.load("resources/audios/DST-TowerDefenseTheme.mp3")
     pygame.mixer.music.play(-1, 0.0)
     pygame.mixer.music.set_volume(0.25)
     screen = pygame.display.set_mode(cfg.SCREENSIZE)
@@ -22,6 +22,8 @@ def main():
     while True:
         choice_interface = ChoiceInterface(cfg)
         map_choice, difficulty_choice = choice_interface.update(screen,cfg)
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load("resources/audios/DST-TowerDefenseTheme.mp3")
         game_interface = GamingInterface(cfg)
         game_interface.start(screen, map_path=cfg.MAPPATHS[str(map_choice)], difficulty_path=cfg.DIFFICULTYPATHS[str(difficulty_choice)])
         end_interface = EndInterface(cfg)

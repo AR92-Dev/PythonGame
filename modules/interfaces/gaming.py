@@ -14,7 +14,12 @@ import cfg
 import os
 class GamingInterface():
     def __init__(self, cfg):
-        self.rightinfo_rect = pygame.Rect(1100, 0, 200, 600)
+        self.Start_Sound = pygame.mixer.Sound('resources/audios/Civil.mp3')
+        self.war_sound = pygame.mixer.Sound('resources/audios/movie-action-loop-by-kk-69752.mp3')
+        self.Start_Sound.play()
+        self.isMuted =False
+        self.Muteimage =pygame.image.load(cfg.IMAGEPATHS['game']['Mute'])
+        self.rightinfo_rect = pygame.Rect(1100, 90, 200, 600)
         self.cfg = cfg
         map_w = self.cfg.SCREENSIZE[0]
         map_h = self.cfg.SCREENSIZE[1]
@@ -35,11 +40,13 @@ class GamingInterface():
         self.bush = pygame.image.load(cfg.IMAGEPATHS['game']['bush'])
         self.nexus = pygame.image.load(cfg.IMAGEPATHS['game']['Castle_Easy'])
         self.cave = pygame.image.load(cfg.IMAGEPATHS['game']['cave'])
+        self.grass_2=pygame.image.load(cfg.IMAGEPATHS['game']['Grass3'])
+        self.ground_2=pygame.image.load(cfg.IMAGEPATHS['game']['Ground2'])
         self.element_size = int(self.grass.get_rect().width)
         self.info_font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 14)
         self.button_font = pygame.font.Font(cfg.FONTPATHS['Calibri'], 20)
-        self.placeable = {0: self.grass,3:self.water}
-        self.placeable_Bomb = {1: self.rock}
+        self.placeable = {0: self.grass,7: self.grass_2}
+        self.placeable_Bomb = {1: self.rock,8: self.ground_2}
         self.map_elements = {
             0: self.grass,
             1: self.rock,
@@ -47,7 +54,10 @@ class GamingInterface():
             3: self.water,
             4: self.bush,
             5: self.nexus,
-            6: self.cave
+            6: self.cave,
+            7: self.grass_2,
+            8: self.ground_2
+            
         }
         self.path_list = []
         self.current_map = dict()
@@ -61,21 +71,27 @@ class GamingInterface():
             'T1': pygame.image.load(cfg.IMAGEPATHS['game']['T1']).convert_alpha(),
             'T2': pygame.image.load(cfg.IMAGEPATHS['game']['T2']).convert_alpha(),
             'T3': pygame.image.load(cfg.IMAGEPATHS['game']['T3']).convert_alpha(),
+            'T4': pygame.image.load(cfg.IMAGEPATHS['game']['T5']).convert_alpha(),
             'Bomb': pygame.image.load(cfg.IMAGEPATHS['game']['Bomb']).convert_alpha(),
-            'XXX': pygame.image.load(cfg.IMAGEPATHS['game']['T1']).convert_alpha(),
+            'XXX': pygame.image.load(cfg.IMAGEPATHS['game']['x']).convert_alpha(),
             'Pause': pygame.image.load(cfg.IMAGEPATHS['game']['pause']).convert_alpha(),
-            'Quit': pygame.image.load(cfg.IMAGEPATHS['game']['T1']).convert_alpha()
+            'Quit': pygame.image.load(cfg.IMAGEPATHS['game']['T1']).convert_alpha(),
+            'Mute': pygame.image.load(cfg.IMAGEPATHS['game']['Mute']).convert_alpha(),
+            'Unmute': pygame.image.load(cfg.IMAGEPATHS['game']['Unmute']).convert_alpha()
 }
         self.buttons = [
             Button(pygame.Rect(button_y, gap, button_w, button_h), 'T1', self.takeT1, self.button_images['T1']),
             Button(pygame.Rect(button_y, gap*2 , button_w, button_h), 'T2', self.takeT2, self.button_images['T2']),
             Button(pygame.Rect(button_y, gap*3 , button_w, button_h), 'T3', self.takeT3, self.button_images['T3']),
-            Button(pygame.Rect(button_y, gap*4 , button_w, button_h), 'Bomb', self.takeBomb, self.button_images['Bomb']),
-            Button(pygame.Rect(button_y, gap*5 , button_w, button_h), 'Remove', self.takeXXX, self.button_images['XXX']),
+            Button(pygame.Rect(button_y, gap*4 , button_w, button_h), 'T4', self.takeT4, self.button_images['T4']),
+            Button(pygame.Rect(button_y, gap*5 , button_w, button_h), 'Bomb', self.takeBomb, self.button_images['Bomb']),
+            Button(pygame.Rect(button_y, gap*6 , button_w, button_h), 'Remove', self.takeXXX, self.button_images['XXX']),
             
 ]
 
     def start(self, screen, map_path=None, difficulty_path=None):
+        self.Pause_rect = pygame.Rect(0, 0, 33, 33)
+        self.Image_Mute_rect = pygame.Rect(0, 0, 33, 33)
         with open(difficulty_path, 'r') as f:
             difficulty_dict = json.load(f)
         self.money = difficulty_dict.get('money')
@@ -83,7 +99,7 @@ class GamingInterface():
         self.max_health = difficulty_dict.get('health')
         difficulty_dict = difficulty_dict.get('enemy')
         generate_enemies_event = pygame.constants.USEREVENT + 0
-        pygame.time.set_timer(generate_enemies_event, 500)
+        pygame.time.set_timer(generate_enemies_event, 60000)
         generate_enemies_flag = False
         num_generate_enemies = 0
         generate_enemy_event = pygame.constants.USEREVENT + 1
@@ -118,6 +134,8 @@ class GamingInterface():
                                     button.onClick()
                                 elif button.text == 'T3':
                                     button.onClick()
+                                elif button.text == 'T4':
+                                    button.onClick()    
                                 elif button.text == 'Bomb':
                                     button.onClick()
                                 elif button.text == 'Remove':
@@ -129,11 +147,23 @@ class GamingInterface():
                                 break
                         if self.Pause_rect.collidepoint(event.pos):
                             self.pauseGame(screen)
+                        if self.Image_Mute_rect.collidepoint(event.pos):
+                            if self.isMuted==False:
+                                self.Muteimage = self.button_images['Unmute']
+                                self.isMuted=True
+                                self.war_sound.play()
+                                self.Start_Sound.stop()
+                            else:
+                                self.isMuted=False
+                                self.Muteimage = self.button_images['Mute']
+                                self.war_sound.stop()
                     if event.button == 3:
                         self.mouse_carried = []
                     if event.button == 2:
                         manual_shot = True
                 if event.type == generate_enemies_event:
+                    Warning = pygame.mixer.Sound('resources/audios/warning-75933.mp3')
+                    Warning.play()
                     generate_enemies_flag = True
                 if event.type == generate_enemy_event:
                     generate_enemy_flag = True
@@ -154,7 +184,7 @@ class GamingInterface():
             if generate_enemy_flag and num_enemy:
                 generate_enemy_flag = False
                 num_enemy -= 1
-                enemy = Enemy(random.choice(range(enemy_range)), self.cfg)
+                enemy = Enemy(random.choice(range(enemy_range)), self.cfg,map_path)
                 self.enemies_group.add(enemy)
             for turret in self.built_turret_group:
                 if not manual_shot:
@@ -174,6 +204,8 @@ class GamingInterface():
                 current_time = pygame.time.get_ticks()
                 if bomb.explode_time and current_time >= bomb.explode_time:
                     bomb.explode(self.enemies_group)
+                    Bomb_Sound = pygame.mixer.Sound('resources/audios/Bomb.mp3')
+                    Bomb_Sound.play()
                     self.built_Bomb_group.remove(bomb)
                     del bomb
                     
@@ -206,6 +238,7 @@ class GamingInterface():
         self.drawButtons(screen)
         self.drawMoney(screen) 
         self.drawPauseButton(screen,self.button_images['Pause'])
+        self.Draw_BMusic(screen,self.Muteimage)
         pygame.display.flip()
     def drawArrows(self, screen):
         for arrow in self.arrows_group:
@@ -214,6 +247,8 @@ class GamingInterface():
         for enemy in self.enemies_group:
             if enemy.life_value <= 0:
                 self.money += enemy.reward
+                Death_Sound = pygame.mixer.Sound('resources/audios/Enemy_Death.mp3')
+                Death_Sound.play()
                 self.enemies_group.remove(enemy)
                 del enemy
                 continue
@@ -260,8 +295,8 @@ class GamingInterface():
 
     
     def showSelectedInfo(self, screen, button):
-        if button.text in ['T1', 'T2', 'T3']:
-            turret = Turret({'T1': 0, 'T2': 1, 'T3': 2}[button.text], self.cfg)
+        if button.text in ['T1', 'T2', 'T3',"T4"]:
+            turret = Turret({'T1': 0, 'T2': 1, 'T3': 2,'T4': 3}[button.text], self.cfg)
             selected_info1 = self.info_font.render('Cost: ' + str(turret.price), True, (255, 255, 255))
             selected_info2 = self.info_font.render('Damage: ' + str(turret.arrow.attack_power), True, (255, 255, 255))
             selected_info3 = self.info_font.render('Affordable: ' + str(self.money >= turret.price), True, (255, 255, 255))
@@ -299,6 +334,8 @@ class GamingInterface():
             if self.current_map.get(turret.coord) in self.placeable.keys():
                 self.money -= turret.price
                 self.built_turret_group.add(turret)
+                Built_Sound = pygame.mixer.Sound('resources/audios/place-100513.mp3')
+                Built_Sound.play()
                 if self.mouse_carried[1].turret_type == 0:
                     self.mouse_carried = []
                     self.takeT1()
@@ -308,6 +345,9 @@ class GamingInterface():
                 elif self.mouse_carried[1].turret_type == 2:
                     self.mouse_carried = []
                     self.takeT3()
+                elif self.mouse_carried[1].turret_type == 3:
+                    self.mouse_carried = []
+                    self.takeT4()
 
 
     def buildBomb(self, position):
@@ -339,6 +379,10 @@ class GamingInterface():
         T3 = Turret(2, self.cfg)
         if self.money >= T3.price:
             self.mouse_carried = ['turret', T3]
+    def takeT4(self):
+        T4 = Turret(3, self.cfg)
+        if self.money >= T4.price:
+            self.mouse_carried = ['turret', T4]
     def takeBomb(self):
         bomb = Bomb(self.cfg)
         if self.money >= bomb.price:
@@ -379,6 +423,8 @@ class GamingInterface():
                     self.current_map[idx_i, idx_j] = element_type
                     if element_type == 1:
                         self.path_list.append((idx_i, idx_j))
+                    elif element_type == 8:
+                        self.path_list.append((idx_i, idx_j))
                 except:
                     continue
         map_name = os.path.basename(map_path)   
@@ -389,11 +435,13 @@ class GamingInterface():
         if green_len > 0:
             pygame.draw.line(self.map_surface, (0, 0, 255), (nexus_pos[0],nexus_pos[1]-10), (nexus_pos[0] + green_len, nexus_pos[1]-10), 3)
         if green_len < nexus_width:
-            pygame.draw.line(self.map_surface, (255, 0, 0), (740 + green_len, 400), (740 + nexus_width, 400), 3)
+            pygame.draw.line(self.map_surface, (255, 0, 0), (nexus_pos[0] + green_len, nexus_pos[1]-10), (nexus_pos[0] + nexus_width, nexus_pos[1]-10), 3)
         screen.blit(self.map_surface, (0, 0))
         map_file.close()
     def pauseGame(self, screen):
+        Pause_Sound = pygame.mixer.Sound('resources/audios/pause-piano-sound-40579.mp3')
         pause_interface = PauseInterface(self.cfg)
+        Pause_Sound.play()
         pause_interface.update(screen)
     def quitGame(self):
         pygame.quit()
@@ -444,12 +492,18 @@ class GamingInterface():
         base_color = (30, 30, 30, 180)
         hover_color = (50, 50, 50, 220)
         button_x, button_y = screen.get_width() - 40, 10
-        self.Pause_rect = pygame.Rect(button_x, button_y, 500, 500)
+        self.Pause_rect = pygame.Rect(button_x, button_y, 500, 50)
         color = hover_color if self.Pause_rect.collidepoint(mouse_pos) else base_color
         button_surface.fill(color)
         image_rect = image.get_rect(center=(button_surface.get_width() // 2, button_surface.get_height() // 2))
         button_surface.blit(image, image_rect)
         screen.blit(button_surface, (button_x, button_y))
+    def Draw_BMusic(self,screen,Image):
+        button_x = (screen.get_width() - 100) 
+        button_y =30
+        self.Image_Mute_rect =Image.get_rect()
+        self.Image_Mute_rect.center= ((button_x,button_y))
+        screen.blit(Image,self.Image_Mute_rect)
         
 
 

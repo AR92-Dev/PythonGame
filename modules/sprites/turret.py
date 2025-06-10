@@ -6,11 +6,11 @@ from .arrow import Arrow
 
 class Turret(pygame.sprite.Sprite):
     def __init__(self, turret_type, cfg):
-        assert turret_type in range(3)
+        assert turret_type in range(5)
         pygame.sprite.Sprite.__init__(self)
         self.cfg = cfg
         self.turret_type = turret_type
-        self.imagepaths = [cfg.IMAGEPATHS['game']['T1'], cfg.IMAGEPATHS['game']['T2'], cfg.IMAGEPATHS['game']['T3']]
+        self.imagepaths = [cfg.IMAGEPATHS['game']['T1'], cfg.IMAGEPATHS['game']['T2'], cfg.IMAGEPATHS['game']['T3'],cfg.IMAGEPATHS['game']['T5']]
         self.image = pygame.image.load(self.imagepaths[turret_type])
         self.rect = self.image.get_rect()
         
@@ -22,9 +22,11 @@ class Turret(pygame.sprite.Sprite):
         self.reset()
     
     def shot(self, position, angle=None):
+        Shot_Sound = pygame.mixer.Sound('resources/audios/TowerShot.mp3')
         arrow = None
         if not self.is_cooling:
             arrow = Arrow(self.turret_type, self.cfg)
+            Shot_Sound.play()
             arrow.reset(position, angle)
             self.is_cooling = True
         if self.is_cooling:
@@ -47,5 +49,9 @@ class Turret(pygame.sprite.Sprite):
             self.is_cooling = False
         elif self.turret_type == 2:
             self.price = 1500
+            self.cool_time = 100
+            self.is_cooling = False
+        elif self.turret_type == 3:
+            self.price = 100
             self.cool_time = 100
             self.is_cooling = False

@@ -2,15 +2,17 @@
 import sys
 import pygame
 
-
-
+pygame.init()
+B_Hover = pygame.mixer.Sound('resources/audios/ButtonHover.mp3')
+B_Press = pygame.mixer.Sound('resources/audios/Button_Press.mp3')
+hovered = False
 class MainInterface(pygame.sprite.Sprite):
     def __init__(self, cfg):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(cfg.IMAGEPATHS['start']['start_interface']).convert()
         self.rect = self.image.get_rect()
         self.rect.center = cfg.SCREENSIZE[0] / 2, cfg.SCREENSIZE[1] / 2
-   
+        
     def update(self):
         pass
 
@@ -26,11 +28,18 @@ class PlayButton(pygame.sprite.Sprite):
         self.rect.center = position
 
     def update(self):
+        global hovered
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False  
 
 
 
@@ -44,11 +53,18 @@ class QuitButton(pygame.sprite.Sprite):
         self.rect.center = position
  
     def update(self):
+        global hovered
         mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
+        is_hovered = self.rect.collidepoint(mouse_pos)
+        
+        if is_hovered:
             self.image = self.image_2
+            if not self.hovered:
+                B_Hover.play()
+                self.hovered = True
         else:
             self.image = self.image_1
+            self.hovered = False
 
 
 
@@ -58,7 +74,7 @@ class StartInterface():
         self.play_btn = PlayButton(cfg)
         self.quit_btn = QuitButton(cfg)
         self.components = pygame.sprite.LayeredUpdates(self.main_interface, self.play_btn, self.quit_btn)
-   
+        
     def update(self, screen):
         clock = pygame.time.Clock()
         while True:
@@ -74,6 +90,7 @@ class StartInterface():
                     if event.button == 1:
                         mouse_pos = pygame.mouse.get_pos()
                         if self.play_btn.rect.collidepoint(mouse_pos):
+                            B_Press.play()
                             return True
                         elif self.quit_btn.rect.collidepoint(mouse_pos):
                             return False

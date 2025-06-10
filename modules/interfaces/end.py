@@ -14,6 +14,8 @@ class MainInterface(pygame.sprite.Sprite):
         self.image.blit(text_surf, text_rect)
         self.rect = self.image.get_rect()
         self.rect.center = cfg.SCREENSIZE[0] / 2, cfg.SCREENSIZE[1] / 2
+        GameOver_Sound = pygame.mixer.Sound('resources/audios/game-over-classic-206486.mp3')
+        GameOver_Sound.play()
     def update(self):
         pass
 

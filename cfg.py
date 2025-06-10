@@ -61,7 +61,9 @@ IMAGEPATHS = {
         'rock': os.path.join(os.getcwd(), 'resources/images/game/rock.png'), 
         'tiles': os.path.join(os.getcwd(), 'resources/images/game/tiles.png'), 
         'unitfont': os.path.join(os.getcwd(), 'resources/images/game/unitfont.png'), 
-        'water': os.path.join(os.getcwd(), 'resources/images/game/water.png'), 
+        'water': os.path.join(os.getcwd(), 'resources/images/game/water.png'),
+        'water_2': os.path.join(os.getcwd(), 'resources/images/game/Water2.png'),
+        'Grass_4': os.path.join(os.getcwd(), 'resources/images/game/Grass4.png'),    
         'x': os.path.join(os.getcwd(), 'resources/images/game/x.png'),
         'Castle_Easy': os.path.join(os.getcwd(), 'resources/images/game/spr_castle_green.png'), 
         'Castle_Mid': os.path.join(os.getcwd(), 'resources/images/game/spr_castle_blue.png'), 
@@ -95,7 +97,11 @@ IMAGEPATHS = {
         'enemy_4_3': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_3.png'),  
         'enemy_4_4': os.path.join(os.getcwd(), 'resources/images/game/Monsters/spr_demon_4.png'),
         'Bomb': os.path.join(os.getcwd(), 'resources/images/game/Bomb.png'),  
-        'pause': os.path.join(os.getcwd(), 'resources/images/game/pause.png'),   
+        'pause': os.path.join(os.getcwd(), 'resources/images/game/pause.png'),
+        'Grass3': os.path.join(os.getcwd(), 'resources/images/game/Grass3.png'),
+        'Ground2': os.path.join(os.getcwd(), 'resources/images/game/Ground_2.png'),
+        'Mute': os.path.join(os.getcwd(), 'resources/images/game/mute.png'), 
+        'Unmute': os.path.join(os.getcwd(), 'resources/images/game/speaker-filled-audio-tool.png'),    
         
     },
     'pause': {
@@ -134,7 +140,12 @@ AUDIOPATHS = {
     'bgm': os.path.join(os.getcwd(), 'resources/audios/bgm.mp3'),
 }
 nexus_positions = {
-    "1.map": (1180, 700),
-    "2.map": (100, 200),
-    "3.map": (500, 300)
+    "1.map": (1300, 700),
+    "2.map": (100, 700),
+    "3.map": (560, 530)
+}
+Enemy_positions = {
+    "1.map": (30, 60),
+    "2.map": (30, 60),
+    "3.map": (40, 60)
 }

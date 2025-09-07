@@ -14,6 +14,3 @@ pip install -r requirements.txt
 Step2:
 run "python Game8.py"
 ```
-
-# Game Display
-![giphy](demonstration/running.gif)
